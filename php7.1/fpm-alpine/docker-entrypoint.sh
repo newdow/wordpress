@@ -2,30 +2,31 @@
 set -euo pipefail
 
 ### my custom ###
+set +u
 #overwrite the ssmtp-conf and then start apache
 rm -f /etc/ssmtp/ssmtp.conf
-if [ ! -z "$SMTP_MAILHUB" ]; then
+if [ ! -z "${SMTP_MAILHUB}" ]; then
 	echo mailhub=${SMTP_MAILHUB} >> /etc/ssmtp/ssmtp.conf
 fi
-if [ ! -z "$SMTP_ROOT" ]; then
+if [ ! -z "${SMTP_ROOT}" ]; then
 	echo root=${SMTP_ROOT} >> /etc/ssmtp/ssmtp.conf
 fi
-if [ ! -z "$SMTP_AUTHUSER" ]; then
+if [ ! -z "${SMTP_AUTHUSER}" ]; then
 	echo AuthUser=${SMTP_AUTHUSER} >> /etc/ssmtp/ssmtp.conf
 fi
-if [ ! -z "$SMTP_AUTHPASS" ]; then
+if [ ! -z "${SMTP_AUTHPASS}" ]; then
 	echo AuthPass=${SMTP_AUTHPASS} >> /etc/ssmtp/ssmtp.conf
 fi
-if [ ! -z "$SMTP_USETLS" ]; then
+if [ ! -z "${SMTP_USETLS}" ]; then
 	echo UseTLS=${SMTP_USETLS} >> /etc/ssmtp/ssmtp.conf
 fi
-if [ ! -z "$SMTP_USESTARTTLS" ]; then
+if [ ! -z "${SMTP_USESTARTTLS}" ]; then
 	echo UseSTARTTLS=${SMTP_USESTARTTLS} >> /etc/ssmtp/ssmtp.conf
 fi
-if [ ! -z "$SMTP_FROMLINEOVERRIDE" ]; then
+if [ ! -z "${SMTP_FROMLINEOVERRIDE}" ]; then
 	echo FromLineOverride=${SMTP_FROMLINEOVERRIDE} >> /etc/ssmtp/ssmtp.conf
 fi
-if [ ! -z "$SMTP_HOSTNAME" ]; then
+if [ ! -z "${SMTP_HOSTNAME}" ]; then
 	echo hostname=${SMTP_HOSTNAME} >> /etc/ssmtp/ssmtp.conf
 fi
 
@@ -41,8 +42,9 @@ if [ ! -z "$WWW_DATA_GROUP_ID" ]; then
 fi
 
 #change user back to www-data for linked volume
-chown -r www-data:www-data /usr/src/wordpress
-chown www-data:www-data /var/www/html -R
+chown -R www-data:www-data /usr/src/wordpress
+chown -R www-data:www-data /var/www/html
+set -u
 ### /my custom ###
 
 # usage: file_env VAR [DEFAULT]
