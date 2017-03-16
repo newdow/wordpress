@@ -31,6 +31,18 @@ fi
 
 rm -f /usr/local/etc/php/conf.d/php-smtp.ini
 echo 'sendmail_path = /usr/sbin/ssmtp -t' >> /usr/local/etc/php/conf.d/php-smtp.ini
+
+# www-data user_id & group_id change
+if [ ! -z "$WWW_DATA_USER_ID" ]; then
+	usermod -u ${WWW_DATA_USER_ID} www-data
+fi
+if [ ! -z "$WWW_DATA_GROUP_ID" ]; then
+	groupmod -g ${WWW_DATA_GROUP_ID} www-data
+fi
+
+#change user back to www-data for linked volume
+chown -r www-data:www-data /usr/src/wordpress
+chown www-data:www-data /var/www/html -R
 ### /my custom ###
 
 # usage: file_env VAR [DEFAULT]
