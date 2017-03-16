@@ -1,6 +1,38 @@
 #!/bin/bash
 set -euo pipefail
 
+### my custom ###
+#overwrite the ssmtp-conf and then start apache
+rm -f /etc/ssmtp/ssmtp.conf
+if [ ! -z "$SMTP_MAILHUB" ]; then
+	echo mailhub=${SMTP_MAILHUB} >> /etc/ssmtp/ssmtp.conf
+fi
+if [ ! -z "$SMTP_ROOT" ]; then
+	echo root=${SMTP_ROOT} >> /etc/ssmtp/ssmtp.conf
+fi
+if [ ! -z "$SMTP_AUTHUSER" ]; then
+	echo AuthUser=${SMTP_AUTHUSER} >> /etc/ssmtp/ssmtp.conf
+fi
+if [ ! -z "$SMTP_AUTHPASS" ]; then
+	echo AuthPass=${SMTP_AUTHPASS} >> /etc/ssmtp/ssmtp.conf
+fi
+if [ ! -z "$SMTP_USETLS" ]; then
+	echo UseTLS=${SMTP_USETLS} >> /etc/ssmtp/ssmtp.conf
+fi
+if [ ! -z "$SMTP_USESTARTTLS" ]; then
+	echo UseSTARTTLS=${SMTP_USESTARTTLS} >> /etc/ssmtp/ssmtp.conf
+fi
+if [ ! -z "$SMTP_FROMLINEOVERRIDE" ]; then
+	echo FromLineOverride=${SMTP_FROMLINEOVERRIDE} >> /etc/ssmtp/ssmtp.conf
+fi
+if [ ! -z "$SMTP_HOSTNAME" ]; then
+	echo hostname=${SMTP_HOSTNAME} >> /etc/ssmtp/ssmtp.conf
+fi
+
+rm -f /usr/local/etc/php/conf.d/php-smtp.ini
+echo 'sendmail_path = /usr/sbin/ssmtp -t' >> /usr/local/etc/php/conf.d/php-smtp.ini
+### /my custom ###
+
 # usage: file_env VAR [DEFAULT]
 #    ie: file_env 'XYZ_DB_PASSWORD' 'example'
 # (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
