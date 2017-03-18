@@ -58,7 +58,10 @@ COPY docker-entrypoint.sh /usr/local/bin/
 ### my custom ###
 RUN apk --update add \
   && ssmtp \
-  && rm -f /var/cache/apk/*
+  && rm -f /var/cache/apk/* \
+  # wp-cli
+  && curl -sSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar > /usr/local/bin/wp \
+  && chmod 755 /usr/local/bin/wp 
 ### /my custom ###
 
 ENTRYPOINT ["docker-entrypoint.sh"]
